@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 const VerifyForm = () => {
   const router = useRouter();
@@ -98,7 +99,7 @@ const VerifyForm = () => {
           disabled={otpPending || !isOtpValid}
           className="w-full mt-4"
         >
-          Xác nhận
+          {otpPending ? <Loader className="size-4 animate-spin" /> : "Xác nhận"}
         </Button>
       </CardContent>
     </Card>
