@@ -20,10 +20,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth-client";
-import { toast } from "sonner";
 import { avatarFallback } from "@/lib/utils";
+import { useSignOut } from "@/hooks/use-sign-out";
 
 interface UserDropdownProps {
   name: string;
@@ -32,18 +30,7 @@ interface UserDropdownProps {
 }
 
 export function UserDropdown({ email, image, name }: UserDropdownProps) {
-  const router = useRouter();
-
-  async function signOut() {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          router.push("/");
-          toast.success("Đăng xuất thành công");
-        },
-      },
-    });
-  }
+  const { handleSignOut } = useSignOut();
 
   return (
     <DropdownMenu>
@@ -99,7 +86,7 @@ export function UserDropdown({ email, image, name }: UserDropdownProps) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={signOut}>
+        <DropdownMenuItem onClick={handleSignOut}>
           <LogOutIcon size={16} className="opacity-60" aria-hidden="true" />
           <span>Đăng xuất</span>
         </DropdownMenuItem>

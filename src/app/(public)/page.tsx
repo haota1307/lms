@@ -1,5 +1,5 @@
 import { Badge } from "@/components/ui/badge";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
@@ -61,7 +61,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-8">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-8 mb-32">
         {features.map((feature, index) => (
           <Card key={index} className="hover:shadow-lg transition-">
             <CardHeader>
