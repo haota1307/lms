@@ -36,6 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import Editor from "@/components/rich-text-editor/editor";
 
 const CoursesCreatePage = () => {
   const form = useForm<CourseSchemaType>({
@@ -158,11 +159,12 @@ const CoursesCreatePage = () => {
                   <FormItem>
                     <FormLabel>Mô tả ngắn</FormLabel>
                     <FormControl>
-                      <Textarea
+                      {/* <Textarea
                         className="field-sizing-content max-h-29.5 min-h-0 resize-none"
                         placeholder="Tóm tắt ngắn gọn về khóa học"
                         {...field}
-                      />
+                      /> */}
+                      <Editor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
