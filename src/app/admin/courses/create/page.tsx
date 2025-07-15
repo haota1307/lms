@@ -37,6 +37,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import Editor from "@/components/rich-text-editor/editor";
+import Uploader from "@/components/file-uploader/uploader";
 
 const CoursesCreatePage = () => {
   const form = useForm<CourseSchemaType>({
@@ -196,10 +197,7 @@ const CoursesCreatePage = () => {
                   <FormItem>
                     <FormLabel>Ảnh mô tả</FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Nhập đường dẫn ảnh mô tả khóa học"
-                        {...field}
-                      />
+                      <Uploader />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
