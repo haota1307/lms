@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, PlusCircle, PlusIcon, Sparkles } from "lucide-react";
+import { ArrowLeft, Loader2, PlusCircle, Sparkles } from "lucide-react";
 import {
   CourseCategory,
   CourseLevel,
@@ -39,8 +39,16 @@ import {
 } from "@/components/ui/select";
 import Editor from "@/components/rich-text-editor/editor";
 import Uploader from "@/components/file-uploader/uploader";
+import { useTransition } from "react";
+import { tryCatch } from "@/hooks/try-catch";
+import { createCourseAction } from "@/app/admin/courses/create/actions";
+import { useRouter } from "next/navigation";
 
 const CoursesCreatePage = () => {
+  const router = useRouter();
+
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -70,8 +78,23 @@ const CoursesCreatePage = () => {
     }
   };
 
-  const onSubmit = (values: CourseSchemaType) => {
-    console.log("Submitted values:", values);
+  const onSubmit = async (values: CourseSchemaType) => {
+    startTransition(async () => {
+      const { data, error } = await tryCatch(createCourseAction(values));
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      if (data?.status === "success") {
+        toast.success(data.message);
+        form.reset();
+        router.push("/admin/courses");
+      } else if (data?.status === "error") {
+        toast.error(data.message);
+      }
+    });
   };
 
   return (
@@ -105,20 +128,6 @@ const CoursesCreatePage = () => {
                     <FormLabel>Tiêu đề khóa học</FormLabel>
                     <FormControl>
                       <Input placeholder="Nhập tiêu đề khóa học" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Mô tả khóa học</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Nhập mô tả khóa học" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -161,12 +170,11 @@ const CoursesCreatePage = () => {
                   <FormItem>
                     <FormLabel>Mô tả ngắn</FormLabel>
                     <FormControl>
-                      {/* <Textarea
+                      <Textarea
                         className="field-sizing-content max-h-29.5 min-h-0 resize-none"
                         placeholder="Tóm tắt ngắn gọn về khóa học"
                         {...field}
-                      /> */}
-                      <Editor field={field} />
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -180,11 +188,7 @@ const CoursesCreatePage = () => {
                   <FormItem>
                     <FormLabel>Mô tả chi tiết</FormLabel>
                     <FormControl>
-                      <Textarea
-                        className="field-sizing-content max-h-29.5 min-h-0 resize-none"
-                        placeholder="Chi tiết nội dung khóa học, đối tượng học, yêu cầu đầu vào..."
-                        {...field}
-                      />
+                      <Editor field={field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -337,9 +341,22 @@ const CoursesCreatePage = () => {
                 )}
               />
 
-              <Button type="submit" className="flex items-center  ">
-                <span>Tạo khóa học</span>
-                <PlusCircle className="ml-1 size-4" />
+              <Button
+                type="submit"
+                className="flex items-center"
+                disabled={isPending}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="ml-1 size-4 animate-spin" />
+                    <span>Đang tạo...</span>
+                  </>
+                ) : (
+                  <>
+                    <PlusCircle className="ml-1 size-4" />
+                    <span>Tạo khóa học</span>
+                  </>
+                )}
               </Button>
             </form>
           </Form>

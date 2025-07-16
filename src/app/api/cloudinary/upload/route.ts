@@ -1,6 +1,6 @@
+import { uploadToCloudinary } from "@/lib/cloudinary";
 import { NextResponse } from "next/server";
 import z from "zod";
-import { uploadToCloudinary } from "@/lib/cloudinary";
 
 export const fileUploadSchema = z.object({
   fileName: z.string().min(1, { message: "Tên file không được để trống" }),
