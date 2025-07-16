@@ -50,7 +50,12 @@ export const RenderErrorState = () => {
         Vui lòng thử lại sau hoặc liên hệ hỗ trợ
       </p>
 
-      <Button variant="secondary" type="button" className="w-full mt-4">
+      <Button
+        variant="secondary"
+        type="button"
+        className="w-full mt-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <RefreshCcwIcon className="size-4 mr-2" />
         Thử lại
       </Button>

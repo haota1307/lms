@@ -11,6 +11,7 @@ import {
 } from "@/lib/zod-schemas";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
@@ -197,7 +198,18 @@ const CoursesCreatePage = () => {
                   <FormItem>
                     <FormLabel>Ảnh mô tả</FormLabel>
                     <FormControl>
-                      <Uploader />
+                      <Uploader
+                        onUploadComplete={(data) => {
+                          field.onChange(data?.url || "");
+                          toast.success("Upload ảnh thành công!");
+                        }}
+                        onUploadError={(error) => {
+                          toast.error(`Lỗi upload: ${error}`);
+                        }}
+                        onFileRemove={() => {
+                          field.onChange("");
+                        }}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
